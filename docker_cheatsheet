@@ -1,0 +1,53 @@
+
+
+/*-----------Docker Cheat Sheet-------------*/
+
+
+
+  **Creating a SQL Database -
+
+  docker run --name wordpressdb -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=wordpress -d mysql:5.7
+
+  /** --name = the name of the database, MYSQL_ROOT_PASSWORD=password = set the password, MYSQL_DATABASE=wordpress = we use MYSQL_DATABASE, it makes sure that a database with that name is created. This way, we know for sure what the name of the database and roots password is. **/
+
+
+  **Force remove database
+
+  docker rm -f wordpressdb
+
+  ** Get latest wordpress
+
+    docker pull wordpress
+
+  **Set up docker files
+  docker run -e WORDPRESS_DB_PASSWORD=password -d --name wordpress --link wordpressdb:mysql -p 127.0.0.2:8080:80 -v "$PWD/":/var/www/html  wordpress
+
+  **provide permission
+  sudo chmod -R 777 wordpress
+
+
+
+***********************************************************************
+  **Docker Compose
+
+   create "docker-compose.yml"
+
+     web:
+     image: wordpress
+     links:
+      - mysql
+     environment:
+      - WORDPRESS_DB_PASSWORD=password
+     ports:
+      - "127.0.0.3:8080:80"
+  mysql:
+     image: mysql:5.7
+     environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=wordpress
+
+      working_dir: /var/www/html
+        volumes:
+         - wordpress/wp-content/:/var/www/html/wp-content
+
+  docker-compose up
